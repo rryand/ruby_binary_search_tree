@@ -32,10 +32,51 @@ class Tree
     [parent_node.left, parent_node.right].find { |i| i == value }
   end
 
+  def level_order(queue = [@root], arr = [], &block)
+    return arr if queue.empty?
+    node = queue.shift
+    block_given? ? yield(node) : arr << node.data
+    [node.left, node.right].each { |node| queue << node unless node.nil? }
+    level_order(queue, arr, &block)
+  end
+
+  def inorder(node = @root, arr = [], &block)
+    return arr if node.nil?
+    inorder(node.left, arr, &block)
+    block_given? ? yield(node) : arr << node.data
+    inorder(node.right, arr, &block)
+  end
+
+  def preorder(node = @root, arr = [], &block)
+    return arr if node.nil?
+    block_given? ? yield(node) : arr << node.data
+    preorder(node.left, arr, &block)
+    preorder(node.right, arr, &block)
+  end
+
+  def postorder(node = @root, arr = [], &block)
+    return arr if node.nil?
+    postorder(node.left, arr, &block)
+    postorder(node.right, arr, &block)
+    block_given? ? yield(node) : arr << node.data
+  end
+
+  def depth(node)
+    return -1 if node.nil?
+    left = depth(node.left)
+    right = depth(node.right)
+    left > right ? left + 1 : right + 1
+  end
+
   def balanced?(root = @root)
-    p levels_count(root.left), levels_count(root.right)
-    diff = levels_count(root.left) - levels_count(root.right)
+    p depth(root.left), depth(root.right)
+    diff = depth(root.left) - depth(root.right)
     diff.abs <= 1
+  end
+
+  def rebalance!
+    arr = level_order
+    @root = build_tree(arr.sort.uniq)
   end
 
   private
@@ -54,13 +95,6 @@ class Tree
   def add_node(parent_node, value)
     node = Node.new(value)
     parent_node > value ? parent_node.left = node : parent_node.right = node
-  end
-
-  def levels_count(node)
-    return -1 if node.nil?
-    left = levels_count(node.left)
-    right = levels_count(node.right)
-    left > right ? left + 1 : right + 1
   end
 
   def traverse(value, root = @root)

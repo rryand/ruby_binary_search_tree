@@ -8,5 +8,8 @@ p tree.balanced?
 p tree.insert(10)
 p tree.insert(10)
 #tree.delete(23)
-p tree.find(3)
+#p tree.find(3)
 #pp tree.root
+
+#tree.level_order { |node| puts node.data }
+p tree.level_order
