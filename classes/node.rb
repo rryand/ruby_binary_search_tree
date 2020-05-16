@@ -10,6 +10,6 @@ class Node
   end
 
   def <=>(other)
-    @data <=> other.data
+    @data <=> other
   end
 end
