@@ -27,14 +27,14 @@ class Tree
   end
 
   def balanced?(root = @root)
-    diff = level(root.left) - level(root.right)
+    diff = levels_count(root.left) - levels_count(root.right)
     diff.abs <= 1
   end
 
   def level(node)
     return 1 if node.nil?
-    left = level(node.left)
-    right = level(node.right)
+    left = levels_count(node.left)
+    right = levels_count(node.right)
     left > right ? left + 1 : right + 1
   end
 end

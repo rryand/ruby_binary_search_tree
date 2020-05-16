@@ -12,11 +12,24 @@ class Tree
 
   def insert(value)
     node = traverse(value)
+    return if node == value
     add_node(node, value)
   end
 
+  def delete(value)
+    parent_node = traverse(value)
+    node = [parent_node.left, parent_node.right].find { |i| i == value }
+    return puts "Did not find node." if node.nil?
+    if node.left || node.right
+      print "Node has children. Continue deletion? (y/n) "
+      return if gets.chomp.downcase != 'y'
+    end
+    parent_node.left == value ? parent_node.left = nil : parent_node.right = nil
+  end
+
   def balanced?(root = @root)
-    diff = level(root.left) - level(root.right)
+    p levels_count(root.left), levels_count(root.right)
+    diff = levels_count(root.left) - levels_count(root.right)
     diff.abs <= 1
   end
 
@@ -24,6 +37,7 @@ class Tree
 
   def build_tree(array)
     p array
+    return nil if array.empty?
     return Node.new(array[0]) if array.length < 2
     index = array.length / 2
     root = Node.new(array[index])
@@ -37,16 +51,16 @@ class Tree
     parent_node > value ? parent_node.left = node : parent_node.right = node
   end
 
-  def level(node)
-    return 1 if node.nil?
-    left = level(node.left)
-    right = level(node.right)
+  def levels_count(node)
+    return -1 if node.nil?
+    left = levels_count(node.left)
+    right = levels_count(node.right)
     left > right ? left + 1 : right + 1
   end
 
   def traverse(value, root = @root)
     node = root > value ? root.left : root.right
-    return root if node.nil?
+    return root if node.nil? || node == value
     traverse(value, node)
   end
 end
