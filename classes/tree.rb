@@ -12,7 +12,7 @@ class Tree
 
   def insert(value)
     node = traverse(value)
-    return if node == value
+    return if node.left == value || node.right == value
     add_node(node, value)
   end
 
@@ -25,6 +25,11 @@ class Tree
       return if gets.chomp.downcase != 'y'
     end
     parent_node.left == value ? parent_node.left = nil : parent_node.right = nil
+  end
+
+  def find(value)
+    parent_node = traverse(value)
+    [parent_node.left, parent_node.right].find { |i| i == value }
   end
 
   def balanced?(root = @root)
