@@ -18,7 +18,7 @@ class Tree
 
   def delete(value)
     parent_node = traverse(value)
-    node = [parent_node.left, parent_node.right].find { |i| i == value }
+    node = [parent_node.left, parent_node.right].find { |node| node == value }
     return puts "Did not find node." if node.nil?
     if node.left || node.right
       print "Node has children. Continue deletion? (y/n) "
@@ -29,7 +29,7 @@ class Tree
 
   def find(value)
     parent_node = traverse(value)
-    [parent_node.left, parent_node.right].find { |i| i == value }
+    [parent_node.left, parent_node.right].find { |node| node == value }
   end
 
   def level_order(queue = [@root], arr = [], &block)
