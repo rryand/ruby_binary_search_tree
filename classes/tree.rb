@@ -52,7 +52,7 @@ class Tree
     end
   end
 
-  def depth(node)
+  def depth(node = @root)
     return -1 if node.nil?
     left = depth(node.left)
     right = depth(node.right)
@@ -60,7 +60,6 @@ class Tree
   end
 
   def balanced?(root = @root)
-    p depth(root.left), depth(root.right)
     diff = depth(root.left) - depth(root.right)
     diff.abs <= 1
   end
@@ -73,7 +72,6 @@ class Tree
   private
 
   def build_tree(array)
-    p array
     return nil if array.empty?
     return Node.new(array[0]) if array.length < 2
     index = array.length / 2
