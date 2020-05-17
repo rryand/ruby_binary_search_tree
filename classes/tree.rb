@@ -40,25 +40,16 @@ class Tree
     level_order(queue, arr, &block)
   end
 
-  def inorder(node = @root, arr = [], &block)
-    return arr if node.nil?
-    inorder(node.left, arr, &block)
-    block_given? ? yield(node) : arr << node.data
-    inorder(node.right, arr, &block)
-  end
-
-  def preorder(node = @root, arr = [], &block)
-    return arr if node.nil?
-    block_given? ? yield(node) : arr << node.data
-    preorder(node.left, arr, &block)
-    preorder(node.right, arr, &block)
-  end
-
-  def postorder(node = @root, arr = [], &block)
-    return arr if node.nil?
-    postorder(node.left, arr, &block)
-    postorder(node.right, arr, &block)
-    block_given? ? yield(node) : arr << node.data
+  [:preorder, :inorder, :postorder].each do |method|
+    define_method(method) do |node = @root, arr = [], &block|
+      return if node.nil?
+      block_given? ? yield(node) : arr << node.data if method == :preorder
+      self.send(method, node.left, arr, &block)
+      block_given? ? yield(node) : arr << node.data if method == :inorder
+      self.send(method, node.right, arr, &block)
+      block_given? ? yield(node) : arr << node.data if method == :postorder
+      arr unless block_given?
+    end
   end
 
   def depth(node)

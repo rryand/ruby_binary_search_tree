@@ -12,4 +12,7 @@ p tree.insert(10)
 #pp tree.root
 
 #tree.level_order { |node| puts node.data }
-p tree.level_order
+#p tree.level_order
+p tree.inorder
+p tree.preorder
+p tree.postorder
